@@ -18,8 +18,8 @@
 6. In the dev tools, find the text highlighted in blue, then right click it, then find the copy dropdown then copy the full XPATH.
 7. Open cheatbot_settings and paste the full XPATH into the empty "" next to PhoneNumberXPATH.
 8. Input your Email and Password for your Gmail account associated to the phone number into the empty quotes to each corresponding item in the json.
-9. Open up the Developer tools using F12 or ctrl + shift + i.
-10. Go to the application tab and then find the cookies dropdown. and  find "https://bard.google.com"
+9. Go back to Bard and open the Developer tools using F12 or ctrl + shift + i.
+10. Go to the application tab and then find the cookies dropdown. and find "https://bard.google.com" in the cookies dropdown.
 11. Find the __Secure_1PSID cookie value and copy and paste it into the empty quotes next to BardCookie
 12. Save the JSON file.
 # How to use Bard to cheat.
