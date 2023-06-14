@@ -5,6 +5,7 @@
  - You need to have the extracted zip file of Cheatbot on your drive. Get the ZIP [here](https://github.com/Pendulum-Utilities/Google-Voice-Cheatbot/releases/download/Open-Beta/Cheatbot.zip).
  - You will need a phone with a phone number.
  - You will need a bard account. Get one [here](https://bard.google.com).
+ - You will need the latest version of chrome installed.
 ---
 ### How to install:
 
