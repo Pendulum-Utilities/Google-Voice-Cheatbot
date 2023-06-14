@@ -1,25 +1,35 @@
 from time import sleep
-import logging
 from selenium.webdriver.remote.remote_connection import LOGGER
 from selenium.webdriver.remote.webdriver import By
 from Bard import Chatbot
-import undetected_chromedriver as uc
-import json as j
 from colorama import init, Fore, Style
+import undetected_chromedriver as uc
+import configparser
+import logging
 import sys
 import threading
 
 # Settings
-settings = j.load(open("cheatbot_settings.json", "r"))
-PhoneNumberXPATH = settings["PhoneNumberXPATH"]
-Password = settings["Password"]
-Email = settings["Email"]
-BardCookie = settings["BardCookie"]
-settings = None
+config = configparser.ConfigParser()
+config.read('settings.ini')
+
+Email = config.get('DEFAULT', 'Email')
+Password = config.get('DEFAULT', 'Password')
+BardCookie = config.get('DEFAULT', 'BardCookie')
+PhoneNumber = config.get('DEFAULT', 'PhoneNumber')
+#check if any of the variables are empty
+if Email == '' or Password == '' or BardCookie == '' or PhoneNumber == '':
+    input(Fore.RED + 'ERROR: Please fill in the settings.ini file. See README.txt for a guide on how set it up. Press enter to continue...' + Fore.RESET)
+    sys.exit()
+
+config.clear()
+# Logging
 logging.basicConfig(level=logging.ERROR)
 LOGGER.setLevel(logging.ERROR)
+
+# Chrome options
 options = uc.ChromeOptions()
-options.add_argument("--headless=chrome")  # Run Chrome in headless mode
+options.add_argument("--headless=chrome")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument('--log-level=3')
@@ -48,7 +58,8 @@ def typewriter_effect(text, delay=0.04):
 def T_Print(text, delay=0.05):
     threading.Thread(target=typewriter_effect, args=(text, delay)).start()
 
-T_Print("Welcome to the CheatBot!\n\nCreated by CROAXER#8683\n\nLogging into google voice... Please wait...")
+# Main program
+T_Print("Welcome to the CheatBot!\n\nCreated by CROAXER#8683\n\nLogging into google... Please wait...")
 click_xpath('//*[@id="header"]/div[2]/a[2]')
 # Input email:
 keys_xpath('//*[@id="identifierId"]', Email)
@@ -61,19 +72,21 @@ keys_xpath('//*[@id="password"]/div[1]/div/div[1]/input', Password)
 sleep(5)
 # next:
 click_xpath('//*[@id="passwordNext"]/div/button/span')
+T_Print("Sucessfully logged into google. Connecting to google voice...")
 # next:
 sleep(5)
 try:
     click_xpath('//*[@id="yDmH0d"]/c-wiz/div/div/div/div[2]/div[4]/div[1]/button/span')
 except:
-    T_Print("No google warning detected.")
+    ...
 # Go to messages to start the main process.
 sleep(1)
 click_xpath('//*[@id="gvPageRoot"]/div[2]/gv-side-panel/mat-sidenav-container/mat-sidenav-content/div/div[2]/gv-side-nav/div/div/gmat-nav-list/a[2]/div')
 sleep(2)
-click_xpath(PhoneNumberXPATH)
-T_Print("Connected to google voice.")
+T_Print("Connected! Almost done...")
+click_xpath("//*[contains(text(), '" + PhoneNumber + "')]")
 sleep(2)
+
 # Main loop:
 elements = driver.find_elements(By.XPATH, '//gv-annotation[@aria-hidden="true" and @class="content ng-star-inserted"]')
 old_text = ""
@@ -106,7 +119,7 @@ No matter how long it takes, it will answer the question. If it doesn't, reload 
 Thank you once again for using cheatbot. I really hope you enjoy it :).
 
 https://discord.gg/4nk2xMfdtm
-""", 0.0005)
+""", .0001)
 while True:
     try:
         elements = driver.find_elements(By.XPATH, '//gv-annotation[@aria-hidden="true" and @class="content ng-star-inserted"]')
@@ -123,7 +136,7 @@ while True:
             T_Print(BardAnswer, 0.001)
             driver.find_element(By.XPATH, value='/html/body/div[1]/div[2]/gv-side-panel/mat-sidenav-container/mat-sidenav-content/div/div[2]/div/gv-messaging-view/div/div/md-content/gv-thread-details/div/div[2]/gv-message-entry/div/div[2]/md-input-container/textarea').send_keys(BardAnswer)
             click_xpath('//*[@id="ib2"]')
-            sleep(3) # Google voices website was coded very poorly. Or maybe its just me. This sleep delay should stop the duplicate bot speaking error.
+            sleep(3)
             T_Print("Message sent successfully.")
             elements = driver.find_elements(By.XPATH, '//gv-annotation[@aria-hidden="true" and @class="content ng-star-inserted"]')
             old_text = ""
